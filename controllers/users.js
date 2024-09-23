@@ -24,14 +24,17 @@ const login = async (req, res) => {
   const isPasswordCorrect =
     user && (await bcrypt.compare(password, user.password)); //compare the password from the request with the password from the user in the database
 
-  if (user && isPasswordCorrect) {
-    response.status(200).json({
+  const secret = process.env.JWT_SECRET;
+
+  if (user && isPasswordCorrect && secret) {
+    res.status(200).json({
       id: user.id,
       email: user.email,
       name: user.name,
+      token: jwt.sign({ id: user.id }, secret, { expiresIn: "1d" }),
     }); //return the user data
   } else {
-    response.status(400).json({ msg: "Incorrect login or password entered" });
+    res.status(400).json({ msg: "Incorrect login or password entered" });
   }
 };
 
