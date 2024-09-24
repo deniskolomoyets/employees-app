@@ -44,7 +44,7 @@ const login = async (req, res) => {
  * @desc Register a new user
  * @access Public
  */
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
