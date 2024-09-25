@@ -38,7 +38,7 @@ const login = async (req, res) => {
       res.status(400).json({ msg: "Incorrect login or password entered" });
     }
   } catch (error) {
-    res.status(400).json({ msg: "Something go wrong" });
+    res.status(500).json({ msg: "Something go wrong" });
   }
 };
 
@@ -89,7 +89,7 @@ const register = async (req, res, next) => {
       res.status(400).json({ msg: "Failed to create a user" });
     }
   } catch (error) {
-    res.status(400).json({ msg: "Something go wrong" });
+    res.status(500).json({ msg: "Something go wrong" });
   }
 };
 

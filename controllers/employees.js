@@ -15,3 +15,33 @@ const all = async (req, res) => {
     res.status(400).json({ message: "Error getting employees" });
   }
 };
+
+/**
+ * @route POST /api/employees/add
+ * @desc Add a new employee
+ * @access Private
+ */
+const add = async (req, res) => {
+  try {
+    const data = req.body;
+    if (!data.firstName || !data.lastName || !data.adress || !data.age) {
+      return res.status(400).json({ message: "Please enter all fields" });
+    } //check if all the fields are filled
+
+    const employee = await prisma.user.update({
+      where: {
+        id: req.user.id,
+      }, //find the user by the id
+      data: {
+        createdEmployee: {
+          create: data,
+        }, // and give him back the created employee
+      },
+    }); //
+    return res.status(201).json(employee);
+  } catch (error) {
+    res.status(400).json({ message: "Error adding employee" });
+  }
+};
+
+module.exports = { all, add };
