@@ -1,7 +1,7 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router(); //get
 const { auth } = require("../middleware/auth");
-const { all } = require("../controllers/employees");
+const { all, add } = require("../controllers/employees");
 
 // api/employees
 router.get("/", auth, all); //this will be the route to get all employees
@@ -12,9 +12,7 @@ router.get("/:id", auth, () => {
 }); //this will be the route to get a single employee
 
 // api/employees/add
-router.post("/add", auth, () => {
-  console.log("add employee");
-});
+router.post("/add", auth, add);
 
 // api/employees/remove/:id
 router.post("/remove/:id", auth, () => {

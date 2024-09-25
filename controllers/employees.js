@@ -1,4 +1,4 @@
-const { orisma } = require("../prisma/prisma-client");
+const { prisma } = require("../prisma/prisma-client");
 
 /**
  * @route GET /api/employees
@@ -24,7 +24,7 @@ const all = async (req, res) => {
 const add = async (req, res) => {
   try {
     const data = req.body;
-    if (!data.firstName || !data.lastName || !data.adress || !data.age) {
+    if (!data.firstName || !data.lastName || !data.address || !data.age) {
       return res.status(400).json({ message: "Please enter all fields" });
     } //check if all the fields are filled
 
@@ -40,7 +40,7 @@ const add = async (req, res) => {
     }); //
     return res.status(201).json(employee);
   } catch (error) {
-    res.status(400).json({ message: "Error adding employee" });
+    res.status(500).json({ message: "Error adding employee" });
   }
 };
 

@@ -32,7 +32,7 @@ const login = async (req, res) => {
         id: user.id,
         email: user.email,
         name: user.name,
-        token: jwt.sign({ id: user.id }, secret, { expiresIn: "1d" }),
+        token: jwt.sign({ id: user.id }, secret, { expiresIn: "30d" }),
       }); //return the user data
     } else {
       res.status(400).json({ msg: "Incorrect login or password entered" });
@@ -55,12 +55,12 @@ const register = async (req, res, next) => {
     if (!name || !email || !password) {
       return res.status(400).json({ msg: "Please enter all fields" });
     }
-
     const registeredUser = await prisma.user.findFirst({
       where: {
         email,
       },
     }); //check if the user already exists
+
     if (registeredUser) {
       return res.status(400).json({ msg: "User already exists" });
     }
@@ -78,18 +78,23 @@ const register = async (req, res, next) => {
 
     const secret = process.env.JWT_SECRET; //get the secret from the environment variables
 
-    if (user && secret) {
+    if (!secret) {
+      return res.status(500).json({ msg: "JWT_SECRET is not defined" });
+    }
+
+    if (user) {
       res.status(201).json({
         id: user.id,
         email: user.email,
         name: user.name,
-        token: jwt.sign({ id: user.id }, secret, { expiresIn: "1d" }), // sign the token with the user id and the secret and set the expiration time to 1 day
+        token: jwt.sign({ id: user.id }, secret, { expiresIn: "30d" }), //create the token
       });
     } else {
       res.status(400).json({ msg: "Failed to create a user" });
     }
   } catch (error) {
-    res.status(500).json({ msg: "Something go wrong" });
+    console.error(error.message);
+    res.status(500).json({ msg: "Something went wrong" });
   }
 };
 
