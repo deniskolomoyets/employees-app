@@ -28,16 +28,23 @@ const add = async (req, res) => {
       return res.status(400).json({ message: "Please enter all fields" });
     } //check if all the fields are filled
 
-    const employee = await prisma.user.update({
-      where: {
-        id: req.user.id,
-      }, //find the user by the id
+    // await prisma.user.update({
+    //   where: {
+    //     id: req.user.id,
+    //   }, //find the user by the id
+    //   data: {
+    //     createdEmployee: {
+    //       create: data,
+    //     }, // and give him back the created employee
+    //   },
+    // });
+    const employee = await prisma.employee.create({
       data: {
-        createdEmployee: {
-          create: data,
-        }, // and give him back the created employee
+        ...data, //spread the data from the request
+        userId: req.user.id, //add the userId of the current user
       },
-    }); //
+    }); //Create a new employee in the database using the data from the request and adding the userId of the current user
+
     return res.status(201).json(employee);
   } catch (error) {
     res.status(500).json({ message: "Error adding employee" });
