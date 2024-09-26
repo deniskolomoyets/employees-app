@@ -99,7 +99,7 @@ const edit = async (req, res) => {
  * @access Private
  */
 const employee = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params; //http://localhost:8000/api/employees/573c6ea2-23b5-48a4-811d-74b28359f3f6
   try {
     const employee = await prisma.employee.findUnique({
       where: {
@@ -112,4 +112,4 @@ const employee = async (req, res) => {
   }
 };
 
-module.exports = { all, add, remove, edit };
+module.exports = { all, add, remove, edit, employee };
