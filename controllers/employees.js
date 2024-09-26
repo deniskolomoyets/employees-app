@@ -71,4 +71,26 @@ const remove = async (req, res) => {
   }
 };
 
-module.exports = { all, add, remove };
+/**
+ * @route PUT /api/employees/edit/:id
+ * @desc Edit an employee
+ * @access Private
+ */
+
+const edit = async (req, res) => {
+  const data = req.body;
+  const id = data.id;
+  try {
+    await prisma.employee.update({
+      where: {
+        id,
+      },
+      data,
+    }); // find the record by id and update it with the new data provided in the data object.
+    res.status(204).json({ message: "Employee edited" });
+  } catch (error) {
+    res.status(500).json({ message: "Error editing employee" });
+  }
+};
+
+module.exports = { all, add, remove, edit };
