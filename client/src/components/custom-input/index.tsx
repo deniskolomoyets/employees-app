@@ -7,7 +7,7 @@ export const CustomInput = ({ name, placeholder, type = "text" }: Props) => {
   return (
     <Form.Item
       name={name}
-      rules={[{ required: true, message: "required field" }]}
+      rules={[{ required: true, message: "Required field" }]}
       shouldUpdate={true}
     >
       <Input placeholder={placeholder} type={type} size="large" />
