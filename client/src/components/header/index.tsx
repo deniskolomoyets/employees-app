@@ -1,5 +1,5 @@
 import React from "react";
-import { TeamOutlined } from "@ant-design/icons";
+import { LoginOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 import { Layout, Space, Typography } from "antd";
 import styles from "./index.module.css";
 import { CustomButton } from "../custom-button";
@@ -19,10 +19,14 @@ export const Header = () => {
       </Space>
       <Space>
         <Link to={Paths.register}>
-          <CustomButton type="default">Register</CustomButton>
+          <CustomButton type="default" icon={<UserOutlined />}>
+            Register
+          </CustomButton>
         </Link>
         <Link to={Paths.login}>
-          <CustomButton type="default">Login</CustomButton>
+          <CustomButton type="default" icon={<LoginOutlined />}>
+            Login
+          </CustomButton>
         </Link>
       </Space>
     </Layout.Header>
