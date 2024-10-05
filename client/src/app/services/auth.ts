@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import { api } from "./api";
 
 export type UserData = Omit<User, "id">; // for deleting the id field
-type ResponseLoginData = { user: User; token: string }; // for defining the response data
+type ResponseLoginData = User & { token: string }; // for defining the response data
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -34,4 +34,4 @@ export const { useRegisterMutation, useLoginMutation, useCurrentQuery } =
 
 export const {
   endpoints: { login, register, current },
-} = authApi; //
+} = authApi;
