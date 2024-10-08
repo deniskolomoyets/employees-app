@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery, retry } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 
-const baseQuery = fetchBaseQuery({ baseUrl: "http://localhost:3000/api" }); // for making requests to the server
+const baseQuery = fetchBaseQuery({ baseUrl: "http://localhost:8000/api" }); // for making requests to the server
 
 const baseQueryWithRetry = retry(baseQuery, { maxRetries: 4 }); // for retrying failed requests
 
