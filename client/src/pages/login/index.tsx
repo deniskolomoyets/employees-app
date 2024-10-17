@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Layout } from "../../components/layout";
 import { Card, Form, Row, Space, Typography } from "antd";
 import { CustomInput } from "../../components/custom-input";
@@ -9,18 +9,29 @@ import { Paths } from "../../paths";
 import { useLoginMutation, UserData } from "../../app/services/auth";
 import { isErrorWithMessage } from "../../utils/is-error-with-message";
 import { ErrorMessage } from "../../components/error-message";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/auth/authSlice";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const [loginUser, loginUserResult] = useLoginMutation();
   const [error, setError] = React.useState("");
+  const user = useSelector(selectUser);
+  const [loginUser, loginUserResult] = useLoginMutation();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const login = async (data: UserData) => {
     try {
       await loginUser(data).unwrap();
+
       navigate("/");
     } catch (error) {
       const mayBeError = isErrorWithMessage(error);
+
       if (mayBeError) {
         setError(error.data.message);
       } else {
@@ -36,7 +47,11 @@ export const Login = () => {
           <Form onFinish={login}>
             <CustomInput type="email" name="email" placeholder="Email" />
             <PasswordInput name="password" placeholder="Password" />
-            <CustomButton type="primary" htmlType="submit">
+            <CustomButton
+              type="primary"
+              htmlType="submit"
+              loading={loginUserResult.isLoading}
+            >
               Sign in
             </CustomButton>
           </Form>

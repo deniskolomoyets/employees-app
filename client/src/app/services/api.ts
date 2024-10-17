@@ -15,7 +15,7 @@ const baseQuery = fetchBaseQuery({
   }, // for setting the token in the request headers
 }); // for making requests to the server
 
-const baseQueryWithRetry = retry(baseQuery, { maxRetries: 1 }); // for retrying failed requests
+const baseQueryWithRetry = retry(baseQuery, { maxRetries: 2 }); // for retrying failed requests
 
 export const api = createApi({
   reducerPath: "splitApi", // for storing the data in the Redux store
