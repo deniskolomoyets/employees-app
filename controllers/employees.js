@@ -7,8 +7,13 @@ const { prisma } = require("../prisma/prisma-client");
  */
 
 const all = async (req, res) => {
+  const userId = req.user.id;
   try {
-    const employees = await prisma.employee.findMany(); //this will get all the employees
+    const employees = await prisma.employee.findMany({
+      where: {
+        userId: userId,
+      },
+    }); //this will get all the employees
 
     res.status(200).json(employees);
   } catch (error) {
@@ -22,8 +27,9 @@ const all = async (req, res) => {
  * @access Private
  */
 const add = async (req, res) => {
+  const data = req.body;
+  const userId = req.user.id;
   try {
-    const data = req.body;
     if (!data.firstName || !data.lastName || !data.address || !data.age) {
       return res.status(400).json({ message: "Please enter all fields" });
     } //check if all the fields are filled
@@ -41,7 +47,7 @@ const add = async (req, res) => {
     const employee = await prisma.employee.create({
       data: {
         ...data, //spread the data from the request
-        userId: req.user.id, //add the userId of the current user
+        userId, //add the userId of the current user
       },
     }); //Create a new employee in the database using the data from the request and adding the userId of the current user
 
@@ -58,10 +64,12 @@ const add = async (req, res) => {
  */
 const remove = async (req, res) => {
   const { id } = req.body;
+  const userId = req.user.id;
   try {
     await prisma.employee.delete({
       where: {
-        id,
+        id: Number(id),
+        userId: userId,
       },
     });
 
@@ -79,11 +87,13 @@ const remove = async (req, res) => {
 
 const edit = async (req, res) => {
   const data = req.body;
-  const id = data.id;
+  const { id } = data.id;
+  const userId = req.user.id;
   try {
     await prisma.employee.update({
       where: {
-        id,
+        id: Number(id),
+        userId: userId,
       },
       data,
     }); // find the record by id and update it with the new data provided in the data object.
@@ -100,12 +110,17 @@ const edit = async (req, res) => {
  */
 const employee = async (req, res) => {
   const { id } = req.params; //http://localhost:8000/api/employees/573c6ea2-23b5-48a4-811d-74b28359f3f6
+  const userId = req.user.id;
   try {
     const employee = await prisma.employee.findUnique({
       where: {
         id,
+        userId,
       },
     }); //find the employee by id
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
     res.status(200).json(employee);
   } catch (error) {
     res.status(500).json({ message: "Error getting employee" });
