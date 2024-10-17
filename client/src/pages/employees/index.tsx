@@ -38,11 +38,14 @@ export const Employees = () => {
       navigate("/login");
     }
   }, [user, navigate]);
+
+  const goToAddUser = () => navigate(Paths.employeeAdd);
+
   return (
     <Layout>
       <CustomButton
         type="primary"
-        onClick={() => null}
+        onClick={goToAddUser}
         icon={<PlusCircleFilled />}
       >
         Add

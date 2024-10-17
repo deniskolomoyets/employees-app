@@ -8,11 +8,11 @@ const { prisma } = require("../prisma/prisma-client");
 
 const all = async (req, res) => {
   try {
-    const employees = await prisma.employees.findMany(); //this will get all the employees
+    const employees = await prisma.employee.findMany(); //this will get all the employees
 
     res.status(200).json(employees);
   } catch (error) {
-    res.status(400).json({ message: "Error getting employees" });
+    res.status(500).json({ message: "Error getting employees" });
   }
 };
 

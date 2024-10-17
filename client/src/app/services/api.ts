@@ -8,13 +8,14 @@ const baseQuery = fetchBaseQuery({
       (getState() as RootState).auth.user?.token ||
       localStorage.getItem("token");
 
-    if (token && token !== null) {
+    if (token) {
       headers.set("authorization", `Bearer ${token}`);
     }
+    return headers;
   }, // for setting the token in the request headers
 }); // for making requests to the server
 
-const baseQueryWithRetry = retry(baseQuery, { maxRetries: 4 }); // for retrying failed requests
+const baseQueryWithRetry = retry(baseQuery, { maxRetries: 1 }); // for retrying failed requests
 
 export const api = createApi({
   reducerPath: "splitApi", // for storing the data in the Redux store
