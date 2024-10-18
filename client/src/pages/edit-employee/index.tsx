@@ -1,13 +1,13 @@
-import { Employee } from "@prisma/client";
-import { Row } from "antd";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useEditEmployeeMutation,
   useGetEmployeeQuery,
 } from "../../app/services/employees";
+import { Row } from "antd";
 import { EmployeeForm } from "../../components/employee-form";
 import { Layout } from "../../components/layout";
+import { Employee } from "@prisma/client";
 import { Paths } from "../../paths";
 import { isErrorWithMessage } from "../../utils/is-error-with-message";
 
@@ -19,7 +19,7 @@ export const EditEmployee = () => {
   const [editEmployee] = useEditEmployeeMutation();
 
   if (isLoading) {
-    return <span>Загрузка</span>;
+    return <span>Loading</span>;
   }
 
   const handleEditUser = async (employee: Employee) => {
@@ -31,27 +31,25 @@ export const EditEmployee = () => {
 
       await editEmployee(editedEmployee).unwrap();
 
-      navigate(`${Paths.status}/created`);
-    } catch (err) {
-      const maybeError = isErrorWithMessage(err);
-
+      navigate(`${Paths.status}/updated`);
+    } catch (error) {
+      const maybeError = isErrorWithMessage(error);
       if (maybeError) {
-        setError(err.data.message);
+        setError(error.data.message);
       } else {
-        setError("Неизвестная ошибка");
+        setError("An error occurred");
       }
     }
   };
-
   return (
     <Layout>
       <Row align="middle" justify="center">
         <EmployeeForm
           onFinish={handleEditUser}
-          title="Редактировать сотрудника"
-          employee={data}
-          btnText="Редактировать"
+          title="Edit an employee"
+          btnText="Edit"
           error={error}
+          employee={data}
         />
       </Row>
     </Layout>
