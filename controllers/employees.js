@@ -68,7 +68,7 @@ const remove = async (req, res) => {
   try {
     await prisma.employee.delete({
       where: {
-        id: Number(id),
+        id,
         userId: userId,
       },
     });
@@ -92,7 +92,7 @@ const edit = async (req, res) => {
   try {
     await prisma.employee.update({
       where: {
-        id: Number(id),
+        id,
         userId: userId,
       },
       data,

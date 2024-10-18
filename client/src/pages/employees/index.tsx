@@ -24,8 +24,8 @@ const columns: ColumnsType<Employee> = [
   },
   {
     title: "Address",
-    dataIndex: "adress",
-    key: "adress",
+    dataIndex: "address",
+    key: "address",
   },
 ];
 export const Employees = () => {
