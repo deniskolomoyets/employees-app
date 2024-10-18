@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useEditEmployeeMutation,
@@ -10,16 +9,26 @@ import { Layout } from "../../components/layout";
 import { Employee } from "@prisma/client";
 import { Paths } from "../../paths";
 import { isErrorWithMessage } from "../../utils/is-error-with-message";
+import { useState } from "react";
 
 export const EditEmployee = () => {
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
   const [error, setError] = useState("");
-  const { data, isLoading } = useGetEmployeeQuery(params.id || "");
+  const {
+    data,
+    isLoading,
+    error: fetchError,
+  } = useGetEmployeeQuery(params.id || "");
   const [editEmployee] = useEditEmployeeMutation();
 
   if (isLoading) {
-    return <span>Loading</span>;
+    return <span>Loading...</span>;
+  }
+
+  if (fetchError) {
+    console.error("Error fetching employee data:", fetchError);
+    return <span>Error fetching employee data</span>;
   }
 
   const handleEditUser = async (employee: Employee) => {
@@ -28,6 +37,8 @@ export const EditEmployee = () => {
         ...data,
         ...employee,
       };
+
+      console.log("Edited Employee:", editedEmployee);
 
       await editEmployee(editedEmployee).unwrap();
 
@@ -41,6 +52,10 @@ export const EditEmployee = () => {
       }
     }
   };
+
+  console.log("Employee ID:", params.id);
+  console.log("Employee Data:", data);
+
   return (
     <Layout>
       <Row align="middle" justify="center">
