@@ -53,9 +53,6 @@ export const EditEmployee = () => {
     }
   };
 
-  console.log("Employee ID:", params.id);
-  console.log("Employee Data:", data);
-
   return (
     <Layout>
       <Row align="middle" justify="center">
